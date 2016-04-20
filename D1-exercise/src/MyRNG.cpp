@@ -17,18 +17,16 @@ public:
 private:
   int a_ = 16807;
   int m_ = 2147483647;
-  int q_, r_, seed_, status_;
-
+  int q_ = (int) (m_/a_);
+  int r_ = m_ % a_;
+  int seed_, status_;
 };
 
 MyRNG::MyRNG(){
-
 #ifdef __DEBUG
-  cout << "Within constructor;\na = " << a_ << " m = " << m_ << endl;
+  cout << "Within constructor;\na = " << a_ << " m = " << m_ <<
+    " q = " << q_ << " r = " << r_ << endl;
 #endif
-  q_ = (int) (m_/a_);
-  r_ = m_ % a_;
-  
 }
 
 MyRNG::~MyRNG(){
@@ -55,10 +53,6 @@ int MyRNG::get_seed(){
 
 double MyRNG::my_lcg(){
   int next = a_ * (status_ % q_) - r_ * (status_ / q_);
-
-// #ifdef __DEBUG
-//   cout << "Within my_lcg function\n";
-// #endif
   
   if(next < 0)
     next += m_;
@@ -150,10 +144,7 @@ void print_output_file(string out, int N, double* dat){
       for(int k = 0; k < 3; k++)
 	f << dat[j + k] << "\t";
       f << endl;
-    }
-    
-    // f << N << " ciao\n";
-
+    }    
     f.close();
   }
   else
@@ -163,7 +154,6 @@ void print_output_file(string out, int N, double* dat){
 int main(int argc, char** argv){
 
   int Nrand = 10000;
-  // int Nrand = 10;
   double* myrand = new double[Nrand];
   double correlation = 0.;
   
