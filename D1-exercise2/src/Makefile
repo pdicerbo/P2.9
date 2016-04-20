@@ -1,12 +1,12 @@
 CC=g++
 CXXFLAGS=-O2 -Wall -std=c++11
-SRCS=MyRNG.cpp
+SRCS=MyRNG.cpp main.cpp 
 OBJS=$(SRCS:%.cpp=%.o)
-EXE=../MyRNG.x
+EXE=../main.x
 
 all: $(EXE)
 
-../MyRNG.x: $(OBJS)
+../main.x: $(OBJS)
 	$(CC) $(OBJS) $(CXXFLAGS) -o  $@
 
 %.o:%.cpp
