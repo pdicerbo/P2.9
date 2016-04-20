@@ -10,7 +10,10 @@ all: $(EXE)
 	$(CC) $(OBJS) $(CXXFLAGS) -o  $@
 
 %.o:%.cpp
-	$(CC) -c $^
+	$(CC) $(CXXFLAGS) -c $^
+
+debug: CXXFLAGS += -D__DEBUG
+debug: all
 
 clean:
 	rm -f *.o

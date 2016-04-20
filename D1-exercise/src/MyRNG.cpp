@@ -54,9 +54,9 @@ int MyRNG::get_seed(){
 double MyRNG::my_lcg(){
   int next = a_ * (status_ % q_) - r_ * (status_ / q_);
 
-#ifdef __DEBUG
-  cout << "Within my_lcg function\n";
-#endif
+// #ifdef __DEBUG
+//   cout << "Within my_lcg function\n";
+// #endif
   
   if(next < 0)
     next += m_;
