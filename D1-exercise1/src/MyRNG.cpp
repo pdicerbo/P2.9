@@ -9,10 +9,9 @@ class MyRNG{
 public:
   MyRNG();
   ~MyRNG();
-  void set_seed(int);
-  int get_seed();
-  double my_lcg();
-  double infamous_choice();
+  void SetSeed(int);
+  int GetSeed();
+  double ExtractRN();
   
 private:
   int a_ = 16807;
@@ -24,34 +23,34 @@ private:
 
 MyRNG::MyRNG(){
 #ifdef __DEBUG
-  cout << "Within constructor;\na = " << a_ << " m = " << m_ <<
+  cout << "Within MyRNG constructor;\na = " << a_ << " m = " << m_ <<
     " q = " << q_ << " r = " << r_ << endl;
 #endif
 }
 
 MyRNG::~MyRNG(){
 #ifdef __DEBUG
-  cout << "Within distructor\n";
+  cout << "Within MyRNG destructor\n";
 #endif
 }
 
-void MyRNG::set_seed(int s){
+void MyRNG::SetSeed(int s){
   seed_ = s;
   status_ = s;
 
 #ifdef __DEBUG
-  cout << "Choosed seed is " << seed_ << endl;
+  cout << "Within MyRNG::SetSeed function:\nChoosed seed is " << seed_ << endl;
 #endif
 }
 
-int MyRNG::get_seed(){
+int MyRNG::GetSeed(){
 #ifdef __DEBUG
-  cout << "Within actual_seed function\n";
+  cout << "Within MyRNG::GetSeed function\n";
 #endif
   return seed_;
 }
 
-double MyRNG::my_lcg(){
+double MyRNG::ExtractRN(){
   int next = a_ * (status_ % q_) - r_ * (status_ / q_);
   
   if(next < 0)
@@ -62,23 +61,14 @@ double MyRNG::my_lcg(){
   return ((double) next) / ((double) m_);
 }
 
-double MyRNG::infamous_choice(){
-  int64_t next = (a_ * status_);
-  next = next % m_;
-
-  status_ = (int) next;
-
-  return ((double) next) / ((double) m_);
-}
-
 class BadRNG{
 
 public:
   BadRNG();
   ~BadRNG();
-  void set_seed(int);
-  int get_seed();
-  double infamous_choice();
+  void SetSeed(int);
+  int GetSeed();
+  double InfamousChoice();
   
 private:
   int64_t a_ = 65539;
@@ -90,7 +80,7 @@ private:
 BadRNG::BadRNG(){
 
 #ifdef __DEBUG
-  cout << "Within constructor;\na = " << a_ << " m = " << m_ << endl;
+  cout << "Within BadRNG constructor;\na = " << a_ << " m = " << m_ << endl;
 #endif
 
   q_ = (int) (m_/a_);
@@ -100,27 +90,27 @@ BadRNG::BadRNG(){
 
 BadRNG::~BadRNG(){
 #ifdef __DEBUG
-  cout << "Within distructor\n";
+  cout << "Within BadRNG destructor\n";
 #endif
 }
 
-void BadRNG::set_seed(int s){
+void BadRNG::SetSeed(int s){
   seed_ = s;
   status_ = s;
 
 #ifdef __DEBUG
-  cout << "Choosed seed is " << seed_ << endl;
+  cout << "Within BadRNG::SetSeed function:\nChoosed seed is " << seed_ << endl;
 #endif
 }
 
-int BadRNG::get_seed(){
+int BadRNG::GetSeed(){
 #ifdef __DEBUG
-  cout << "Within actual_seed function\n";
+  cout << "Within BadRNG::GetSeed function\n";
 #endif
   return seed_;
 }
 
-double BadRNG::infamous_choice(){
+double BadRNG::InfamousChoice(){
   int64_t next = (a_ * status_) % m_;
 
   status_ = next;
@@ -158,10 +148,10 @@ int main(int argc, char** argv){
   double correlation = 0.;
   
   MyRNG rng;
-  rng.set_seed(1234);
+  rng.SetSeed(1234);
 
   for(int j = 0; j < Nrand; j++)
-    myrand[j] = rng.my_lcg();
+    myrand[j] = rng.ExtractRN();
 
   // calculate correlation
   for(int j = 0; j < Nrand-2; j++)
@@ -175,10 +165,10 @@ int main(int argc, char** argv){
 
   // "infamous" section
   BadRNG InfCh;
-  InfCh.set_seed(1234);
+  InfCh.SetSeed(1234);
 
   for(int j = 0; j < Nrand; j++)
-    myrand[j] = InfCh.infamous_choice();
+    myrand[j] = InfCh.InfamousChoice();
 
   // calculate correlation
   for(int j = 0; j < Nrand-2; j++)
