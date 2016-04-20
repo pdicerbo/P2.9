@@ -50,7 +50,7 @@ int main(int argc, char** argv){
     f << x_vec[j] << "\t" << n_data[j]/(NData*delta) << endl;
 
   f.close();
-  
+
   delete [] myrand;
 
   return 0;
