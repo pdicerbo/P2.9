@@ -127,8 +127,7 @@ int BadRNG::get_seed(){
 }
 
 double BadRNG::infamous_choice(){
-  int64_t next = (a_ * status_);
-  next = next % m_;
+  int64_t next = (a_ * status_) % m_;
 
   status_ = next;
 
