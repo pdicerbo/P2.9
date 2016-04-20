@@ -7,7 +7,7 @@ EXE=../main.x
 all: $(EXE)
 
 ../main.x: $(OBJS)
-	$(CC) $(OBJS) $(CXXFLAGS) -o  $@
+	$(CC) $(OBJS) $(CXXFLAGS) -o $@
 
 %.o:%.cpp
 	$(CC) $(CXXFLAGS) -c $^
