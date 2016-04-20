@@ -1,5 +1,5 @@
 CC=g++
-CXXFLAGS=-O2 -Wall
+CXXFLAGS=-O2 -Wall -std=c++11
 SRCS=MyRNG.cpp
 OBJS=$(SRCS:%.cpp=%.o)
 EXE=../MyRNG.x

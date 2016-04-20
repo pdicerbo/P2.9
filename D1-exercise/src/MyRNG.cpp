@@ -1,31 +1,33 @@
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 
 using namespace std;
 
 class MyRNG{
 
 public:
-  MyRNG(int, int);
+  MyRNG();
   ~MyRNG();
   void set_seed(int);
   int get_seed();
   double my_lcg();
+  double infamous_choice();
   
 private:
-  int a_, m_, q_, r_, seed_, status_;
+  int a_ = 16807;
+  int m_ = 2147483647;
+  int q_, r_, seed_, status_;
 
 };
 
-MyRNG::MyRNG(int a, int m){
+MyRNG::MyRNG(){
 
 #ifdef __DEBUG
-  cout << "Within constructor;\n";
+  cout << "Within constructor;\na = " << a_ << " m = " << m_ << endl;
 #endif
-  a_ = a;
-  m_ = m;
-  q_ = (int) (m/a);
-  r_ = m % a;
+  q_ = (int) (m_/a_);
+  r_ = m_ % a_;
   
 }
 
@@ -66,6 +68,74 @@ double MyRNG::my_lcg(){
   return ((double) next) / ((double) m_);
 }
 
+double MyRNG::infamous_choice(){
+  int64_t next = (a_ * status_);
+  next = next % m_;
+
+  status_ = (int) next;
+
+  return ((double) next) / ((double) m_);
+}
+
+class BadRNG{
+
+public:
+  BadRNG();
+  ~BadRNG();
+  void set_seed(int);
+  int get_seed();
+  double infamous_choice();
+  
+private:
+  int64_t a_ = 65539;
+  int64_t m_ = 2147483648;
+  int64_t q_, r_, seed_, status_;
+
+};
+
+BadRNG::BadRNG(){
+
+#ifdef __DEBUG
+  cout << "Within constructor;\na = " << a_ << " m = " << m_ << endl;
+#endif
+
+  q_ = (int) (m_/a_);
+  r_ = m_ % a_;
+  
+}
+
+BadRNG::~BadRNG(){
+#ifdef __DEBUG
+  cout << "Within distructor\n";
+#endif
+}
+
+void BadRNG::set_seed(int s){
+  seed_ = s;
+  status_ = s;
+
+#ifdef __DEBUG
+  cout << "Choosed seed is " << seed_ << endl;
+#endif
+}
+
+int BadRNG::get_seed(){
+#ifdef __DEBUG
+  cout << "Within actual_seed function\n";
+#endif
+  return seed_;
+}
+
+double BadRNG::infamous_choice(){
+  int64_t next = (a_ * status_);
+  next = next % m_;
+
+  status_ = next;
+
+  return ((double) next) / ((double) m_);
+}
+
+
 void print_output_file(string out, int N, double* dat){
 
   char* NameFile = &out[0];
@@ -93,14 +163,12 @@ void print_output_file(string out, int N, double* dat){
 
 int main(int argc, char** argv){
 
-  int m = 2147483647;
-  int a = 16807;
   int Nrand = 10000;
   // int Nrand = 10;
   double* myrand = new double[Nrand];
   double correlation = 0.;
   
-  MyRNG rng(a, m);
+  MyRNG rng;
   rng.set_seed(1234);
 
   for(int j = 0; j < Nrand; j++)
@@ -115,6 +183,22 @@ int main(int argc, char** argv){
   cout << "the correlation obtained for the obtained random sequence is: " << correlation << endl;
 
   print_output_file("RandLCG.dat", Nrand, myrand);
+
+  // "infamous" section
+  BadRNG InfCh;
+  InfCh.set_seed(1234);
+
+  for(int j = 0; j < Nrand; j++)
+    myrand[j] = InfCh.infamous_choice();
+
+  // calculate correlation
+  for(int j = 0; j < Nrand-2; j++)
+    correlation += myrand[j]*myrand[j+1];
+
+  correlation /= Nrand;
+
+  cout << "the correlation obtained for the obtained random sequence is: " << correlation << endl;
+  print_output_file("InfamousLCG.dat", Nrand, myrand);
   
   delete [] myrand;
 
