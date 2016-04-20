@@ -6,9 +6,9 @@ class MyRNG{
 public:
   MyRNG();
   ~MyRNG();
-  void set_seed(int);
-  int get_seed();
-  double my_lcg();
+  void SetSeed(int);
+  int GetSeed();
+  double ExtractRN();
   
 private:
   int a_ = 16807;

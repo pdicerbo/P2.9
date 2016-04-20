@@ -5,34 +5,34 @@
 
 MyRNG::MyRNG(){
 #ifdef __DEBUG
-  std::cout << "Within constructor;\na = " << a_ << " m = " << m_ <<
+  std::cout << "Within MyRNG constructor;\na = " << a_ << " m = " << m_ <<
     " q = " << q_ << " r = " << r_ << std::endl;
 #endif
 }
 
 MyRNG::~MyRNG(){
 #ifdef __DEBUG
-  std::cout << "Within distructor\n";
+  std::cout << "Within MyRNG destructor\n";
 #endif
 }
 
-void MyRNG::set_seed(int s){
+void MyRNG::SetSeed(int s){
   seed_ = s;
   status_ = s;
 
 #ifdef __DEBUG
-  std::cout << "Choosed seed is " << seed_ << std::endl;
+  std::cout << "Within MyRNG::SetSeed function\nChoosed seed is " << seed_ << std::endl;
 #endif
 }
 
-int MyRNG::get_seed(){
+int MyRNG::GetSeed(){
 #ifdef __DEBUG
-  std::cout << "Within actual_seed function\n";
+  std::cout << "Within MyRNG::GetSeed function\n";
 #endif
   return seed_;
 }
 
-double MyRNG::my_lcg(){
+double MyRNG::ExtractRN(){
   int next = a_ * (status_ % q_) - r_ * (status_ / q_);
   
   if(next < 0)

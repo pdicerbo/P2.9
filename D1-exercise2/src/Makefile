@@ -1,6 +1,6 @@
 CC=g++
 CXXFLAGS=-O2 -Wall -std=c++11
-SRCS=MyRNG.cpp main.cpp 
+SRCS=MyRNG.cpp GaussRNG.cpp main.cpp 
 OBJS=$(SRCS:%.cpp=%.o)
 EXE=../main.x
 

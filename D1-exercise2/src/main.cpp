@@ -2,52 +2,54 @@
 #include <fstream>
 #include <cstdint>
 #include "MyRNG.h"
+#include "GaussRNG.h"
 
 using namespace std;
 
-void print_output_file(string out, int N, double* dat){
-
-  char* NameFile = &out[0];
-  ofstream f(NameFile);
-
-#ifdef __DEBUG
-  cout << "Within print_output_file; namefile is " << out << endl;
-#endif
-  
-  if(f.is_open()){
-    
-    for(int j = 0; j < N - 3; j++){
-      for(int k = 0; k < 3; k++)
-	f << dat[j + k] << "\t";
-      f << endl;
-    }    
-    f.close();
-  }
-  else
-    cout << "Unable to open file\n";
-}
-
 int main(int argc, char** argv){
 
-  int Nrand = 10000;
+  int Nrand = 200000;
   double* myrand = new double[Nrand];
-  double correlation = 0.;
-  
-  MyRNG rng;
-  rng.set_seed(1234);
+
+  GaussRNG rng(0., 0.5);
+
+  rng.SetSeed(1234);
 
   for(int j = 0; j < Nrand; j++)
-    myrand[j] = rng.my_lcg();
+    myrand[j] = rng.ExtractRN();
 
-  // calculate correlation
-  for(int j = 0; j < Nrand-2; j++)
-    correlation += myrand[j]*myrand[j+1];
+  // Histogram data
+  double xmin = -3., xmax = 3.;
+  int Nbin = 60, NData = 0;
+  int index;
+  double delta = (xmax - xmin) / ((double) Nbin);
 
-  correlation /= Nrand;
+  double* x_vec = new double[Nbin];
+  int* n_data = new int[Nbin];
+  
+  for(int j = 0; j < Nbin; j++){
+    // array with the mean point of all the bins
+    x_vec[j]  = xmin + (2*j+1)*0.5*delta;
+    // bin size
+    n_data[j] = 0;
+  }
+  
+  for(int j = 0; j < Nrand; j++){
+    index = (int) ((myrand[j] - xmin) / delta);
 
-  cout << "the correlation obtained for the obtained random sequence is: " << correlation << endl;
+    if(myrand[j] < xmin or myrand[j] > xmax)
+      continue;
 
-  print_output_file("RandLCG.dat", Nrand, myrand);
+    NData++;
+    n_data[index]++;
+  }
+
+  ofstream f("NormGauss.dat");
+
+  for(int j = 0; j < Nbin; j++)
+    f << x_vec[j] << "\t" << n_data[j]/(NData*delta) << endl;
+
+  f.close();
   
   delete [] myrand;
 

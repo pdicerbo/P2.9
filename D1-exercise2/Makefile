@@ -4,5 +4,5 @@ debug:
 	$(MAKE) -C src debug
 
 clean:
-	rm -f MyRNG.x *.dat
+	rm -f *.x *.dat
 	$(MAKE) -C src clean
