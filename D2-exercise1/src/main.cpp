@@ -46,7 +46,7 @@ int main(int argc, char** argv){
     
     MyIntegral = MeanF /((double) Nrand);
     MeanFSquare /= Nrand;
-    MySigmaSquare = 1./(Nrand - 1) * (MeanFSquare - MyIntegral);
+    MySigmaSquare = 1./(Nrand - 1) * (MeanFSquare - MyIntegral * MyIntegral);
     
     f << Nrand << "\t" << MyIntegral << "\t" << sqrt(MySigmaSquare) << endl;
   }

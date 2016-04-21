@@ -1,7 +1,7 @@
 
 
 *******************************************************************************
-Thu Apr 21 12:44:50 2016
+Thu Apr 21 13:47:48 2016
 
 
 FIT:    data read from "MyIntegral.dat" u 1:3
@@ -14,21 +14,21 @@ function used for fitting: f(x)
 fitted parameters initialized with current variable values
 
 iter      chisq       delta/lim  lambda   a             b            
-   0 3.9936585628e+01   0.00e+00  4.51e-02    1.000000e+00  -5.000000e-01
-  38 1.0589917814e-02   0.00e+00  4.51e+05    2.642294e+01  -4.965812e-01
+   0 3.8427332769e+00   0.00e+00  4.51e-02    1.000000e+00  -5.000000e-01
+  15 6.2756062040e-03  -5.32e-01  4.51e-06    8.238812e+00  -4.861773e-01
 
-After 38 iterations the fit converged.
-final sum of squares of residuals : 0.0105899
-rel. change during last iteration : 0
+After 15 iterations the fit converged.
+final sum of squares of residuals : 0.00627561
+rel. change during last iteration : -5.31855e-06
 
 degrees of freedom    (FIT_NDF)                        : 198
-rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00731331
-variance of residuals (reduced chisquare) = WSSR/ndf   : 5.34844e-05
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00562983
+variance of residuals (reduced chisquare) = WSSR/ndf   : 3.1695e-05
 
 Final set of parameters            Asymptotic Standard Error
 =======================            ==========================
-a               = 26.4229          +/- 0.1271       (0.4809%)
-b               = -0.496581        +/- 0.0006694    (0.1348%)
+a               = 8.23881          +/- 0.09161      (1.112%)
+b               = -0.486177        +/- 0.001536     (0.3158%)
 
 correlation matrix of the fit parameters:
                 a      b      
