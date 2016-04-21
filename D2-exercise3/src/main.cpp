@@ -47,7 +47,7 @@ int main(int argc, char** argv){
   GaussRNG rng(0., sigma);
   ofstream f("MyIntegral.dat");
   
-  for(int Nrand = 100; Nrand < Nend; Nrand += 100){
+  for(int Nrand = 100; Nrand <= Nend; Nrand += 100){
     rng.SetSeed(1234);
     MeanF = 0.;
     MeanFSquare = 0.;
