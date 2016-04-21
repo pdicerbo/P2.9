@@ -18,7 +18,7 @@ double MyFunc(double* MyArr, int N){
 
 int main(int argc, char** argv){
 
-  int Nend = 200000;
+  int Nend = 20000;
   int SpaceDim = 10;
   double* MyRand = new double[SpaceDim];
   double MeanF = 0.;
@@ -29,9 +29,9 @@ int main(int argc, char** argv){
 
   ofstream f("MyIntegral.dat");
   
-  for(int Nrand = 1000; Nrand <= Nend; Nrand += 1000){
-
+  for(int Nrand = 100; Nrand <= Nend; Nrand += 100){
     rng.SetSeed(1234);
+
     MeanF = 0.;
     MeanFSquare = 0.;
     
@@ -48,13 +48,14 @@ int main(int argc, char** argv){
     MeanFSquare /= Nrand;
     MySigmaSquare = 1./(Nrand - 1) * (MeanFSquare - MyIntegral);
     
-    cout << "MyIntegral = " << MyIntegral << " diff = " << MyIntegral - 155./6. <<
-      " sigma_square = " << MySigmaSquare << endl;
-
     f << Nrand << "\t" << MyIntegral << "\t" << sqrt(MySigmaSquare) << endl;
   }
 
   f.close();
+  cout << "With " << Nend << " evaluation, MyIntegral = " << MyIntegral <<
+    "; the difference with true value is " << MyIntegral - 155./6. <<
+    " sigma = " << sqrt(MySigmaSquare) << endl;
+
   
   delete [] MyRand;
 
