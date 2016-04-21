@@ -36,40 +36,47 @@ double MyProbDistrib(double* MyArr, double sigma, int N){
 
 int main(int argc, char** argv){
 
-  int Nrand = 20000;
+  int Nend = 20000;
   int SpaceDim = 10;
   double* MyRand = new double[SpaceDim];
-  double MeanF = 0.;
-  double MeanFSquare = 0.;
+  double MeanF, MeanFSquare;
   double FuncVal, MyIntegral, MySigmaSquare;
   double sigma = 1.;
   double RealValue = 10*pow(2.*pi,5);
   
   GaussRNG rng(0., sigma);
-
-  rng.SetSeed(1234);
-      
-  for(int k = 0; k < Nrand; k++){
-    rng.FillArray(MyRand, SpaceDim);
-
-    FuncVal = MyFunc(MyRand, sigma, SpaceDim);
-    FuncVal /= MyProbDistrib(MyRand, sigma, SpaceDim);
+  ofstream f("MyIntegral.dat");
+  
+  for(int Nrand = 100; Nrand < Nend; Nrand += 100){
+    rng.SetSeed(1234);
+    MeanF = 0.;
+    MeanFSquare = 0.;
     
-    MeanF += FuncVal;
-    MeanFSquare += FuncVal * FuncVal;
+    for(int k = 0; k < Nrand; k++){
+      rng.FillArray(MyRand, SpaceDim);
+      
+      FuncVal = MyFunc(MyRand, sigma, SpaceDim);
+      FuncVal /= MyProbDistrib(MyRand, sigma, SpaceDim);
+      
+      MeanF += FuncVal;
+      MeanFSquare += FuncVal * FuncVal;
+    }
+
+    MeanF /= (double) Nrand;
+    MeanFSquare /= Nrand;
+    
+    MyIntegral = MeanF;
+    MySigmaSquare =  (MeanFSquare - MeanF * MeanF)/(Nrand - 1);
+
+    f << Nrand << "\t" << MyIntegral << "\t" << sqrt(MySigmaSquare) << endl;
   }
 
-  MeanF /= (double) Nrand;
-  MeanFSquare /= Nrand;
-
-  MyIntegral = MeanF;
-  MySigmaSquare =  (MeanFSquare - MeanF * MeanF)/(Nrand - 1);
-  
-  cout << "With " << Nrand << " evaluation, \n\tMyIntegral = " << MyIntegral <<
+  cout << "With " << Nend << " evaluation, \n\tMyIntegral = " << MyIntegral <<
     "; TrueValue = " << RealValue <<
     "; the difference with true value is " << MyIntegral - RealValue <<
     " sigma = " << sqrt(MySigmaSquare) << endl;
 
+  f.close();
   
   delete [] MyRand;
 
